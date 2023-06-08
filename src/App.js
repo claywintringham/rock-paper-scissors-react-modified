@@ -1,25 +1,75 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react"
 
-function App() {
+const App = () => {
+  const [userChoice, setUserChoice] = useState("")
+  const [computerChoice, setComputerChoice] = useState("")
+  const [result, setResult] = useState(null)
+
+  // const choices = ["rock", "paper", "scissors"] //✌🏻 ✊🏻 🖐🏻
+  const choices = ["✊🏻", "🖐🏻", "✌🏻"]
+
+  const handleClick = (value) => {
+    setUserChoice(value)
+    generateComputerChoice()
+    checkResult()
+  }
+
+  const generateComputerChoice = () => {
+    const randomNumber = Math.floor(Math.random() * choices.length)
+    const randomChoice = choices[randomNumber]
+
+    setComputerChoice(randomChoice)
+  }
+
+  useEffect(() => {
+    checkResult()
+  }, [computerChoice, userChoice])
+
+  const checkResult = () => {
+    switch (userChoice + computerChoice) {
+      case "✌🏻🖐🏻":
+      case "✊🏻✌🏻":
+      case "🖐🏻✊🏻":
+        // case "scissorspaper":
+        // case "rockscissors":
+        // case "paperrock":
+        setResult("You Win!")
+        break
+
+      case "🖐🏻✌🏻":
+      case "✌🏻✊🏻":
+      case "✊🏻🖐🏻":
+        setResult("You Lose!")
+        break
+
+      case "✊🏻✊🏻":
+      case "🖐🏻🖐🏻":
+      case "✌🏻✌🏻":
+        setResult("A Draw!")
+        break
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>You: {userChoice} </h1>
+      <h1>Computer: {computerChoice} </h1>
+
+      <div className="title">
+        {choices.map((choice, index) => (
+          <button
+            type="button"
+            className="btn selection"
+            style={{ marginTop: "2rem" }}
+            key={index}
+            onClick={() => handleClick(choice)}
+          >
+            {choice}
+          </button>
+        ))}
+      </div>
+      <h1>{result}</h1>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
